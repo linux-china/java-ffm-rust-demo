@@ -62,6 +62,40 @@ public class JarFFMLoader {
         }
     }
 
+    static <T> void extractLib(Class<T> cls, String jarPathPrefix, String name, String platformDir) {
+        String libFileName = PlatformConventions.LIB_PREFIX + name + PlatformConventions.LIB_SUFFIX;
+        final String sep = jarPathPrefix.endsWith("/") ? "" : "/";
+        String pathInJar = jarPathPrefix + sep;
+        if (platformDir != null) {
+            pathInJar += platformDir + "/";
+        }
+        pathInJar += libFileName;
+        final InputStream is = cls.getResourceAsStream(pathInJar);
+        if (is == null) {
+            throw new LoadException("Internal error: cannot find " + pathInJar + ", broken package?");
+        }
+
+        try {
+            File tempLib = new File(libFileName);
+            try {
+                // copy to tempLib
+                try (FileOutputStream out = new FileOutputStream(tempLib)) {
+                    StreamTransfer.copyToStream(is, out);
+                } finally {
+                    tempLib.deleteOnExit();
+                }
+            } catch (IOException e) {
+                throw new LoadException("Internal error: cannot unpack " + tempLib, e);
+            }
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                // ignore
+            }
+        }
+    }
+
     /**
      * Loads a native library from a JAR file.
      * <p>
@@ -83,5 +117,12 @@ public class JarFFMLoader {
      */
     static <T> Path loadLib(Class<T> cls, String jarPathPrefix, String name) {
         return loadLib(cls, jarPathPrefix, name, Platform.RESOURCE_PREFIX);
+    }
+
+    /**
+     * extract lib to current directory
+     */
+    static <T> void extractLib(Class<T> cls, String jarPathPrefix, String name) {
+        extractLib(cls, jarPathPrefix, name, Platform.RESOURCE_PREFIX);
     }
 }
