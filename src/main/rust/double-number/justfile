@@ -1,0 +1,2 @@
+generate-headers:
+  cargo test --features c-headers -- generate_headers
