@@ -37,12 +37,12 @@ public class RustBindings {
     }
 
     public static String welcome(String name) {
-        try (Arena arena = Arena.ofShared()) {
+        try (Arena arena = Arena.ofConfined()) {
             final MemorySegment paramSegment = Vec_uint8.allocate(arena);
             Vec_uint8.ptr(paramSegment, arena.allocateFrom(name));
             Vec_uint8.len(paramSegment, name.getBytes().length);
             Vec_uint8.cap(paramSegment, name.getBytes().length);
-            final MemorySegment result = (MemorySegment) welcomeMethodHandler.invokeExact(arena, paramSegment);
+            final MemorySegment result = (MemorySegment) welcomeMethodHandler.invokeExact((SegmentAllocator) arena, paramSegment);
             final long len = Vec_uint8.len(result);
             byte[] bytes = new byte[(int) len];
             final MemorySegment stringSegment = Vec_uint8.ptr(result).asSlice(0, len);
