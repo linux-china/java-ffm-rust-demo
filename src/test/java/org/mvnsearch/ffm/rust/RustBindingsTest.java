@@ -10,4 +10,9 @@ public class RustBindingsTest {
     public void testDoubleNumber() {
         assertEquals(20, RustBindings.doubleNumber(10));
     }
+
+    @Test
+    public void testWelcome() {
+        assertEquals("Welcome, Jackie!", RustBindings.welcome("Jackie"));
+    }
 }
