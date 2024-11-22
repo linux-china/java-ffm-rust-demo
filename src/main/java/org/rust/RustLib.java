@@ -102,5 +102,52 @@ public class RustLib {
            throw new AssertionError("should not reach here", ex$);
         }
     }
+
+    private static class welcome {
+        public static final FunctionDescriptor DESC = FunctionDescriptor.of(
+            Vec_uint8.layout(),
+            Vec_uint8.layout()
+        );
+
+        public static final MethodHandle HANDLE = Linker.nativeLinker().downcallHandle(
+                    RustLib.findOrThrow("welcome"),
+                    DESC);
+    }
+
+    /**
+     * Function descriptor for:
+     * {@snippet lang=c :
+     * Vec_uint8_t welcome(Vec_uint8_t name)
+     * }
+     */
+    public static FunctionDescriptor welcome$descriptor() {
+        return welcome.DESC;
+    }
+
+    /**
+     * Downcall method handle for:
+     * {@snippet lang=c :
+     * Vec_uint8_t welcome(Vec_uint8_t name)
+     * }
+     */
+    public static MethodHandle welcome$handle() {
+        return welcome.HANDLE;
+    }
+    /**
+     * {@snippet lang=c :
+     * Vec_uint8_t welcome(Vec_uint8_t name)
+     * }
+     */
+    public static MemorySegment welcome(SegmentAllocator allocator, MemorySegment name) {
+        var mh$ = welcome.HANDLE;
+        try {
+            if (TRACE_DOWNCALLS) {
+                traceDowncall("welcome", allocator, name);
+            }
+            return (MemorySegment)mh$.invokeExact(allocator, name);
+        } catch (Throwable ex$) {
+           throw new AssertionError("should not reach here", ex$);
+        }
+    }
 }
 
