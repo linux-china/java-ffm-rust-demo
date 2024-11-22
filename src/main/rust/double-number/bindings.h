@@ -22,6 +22,25 @@ int32_t
 doubleNumber (
     int32_t n);
 
+/** \brief
+ *  Same as [`Vec<T>`][`rust::Vec`], but with guaranteed `#[repr(C)]` layout
+ */
+typedef struct Vec_uint8 {
+    /** <No documentation available> */
+    uint8_t * ptr;
+
+    /** <No documentation available> */
+    size_t len;
+
+    /** <No documentation available> */
+    size_t cap;
+} Vec_uint8_t;
+
+/** <No documentation available> */
+Vec_uint8_t
+welcome (
+    Vec_uint8_t name);
+
 
 #ifdef __cplusplus
 } /* extern \"C\" */
