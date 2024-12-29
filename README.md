@@ -20,6 +20,7 @@ Java 22+ FFM demo with Rust
 
 # References
 
+* The Foreign Function and Memory API: https://dev.java/learn/ffm/
 * Java Bindings for Rust: A Comprehensive Guide - https://akilmohideen.github.io/java-rust-bindings-manual/title.html
 * JEP 454: Foreign Function & Memory API: https://openjdk.org/jeps/454
 * rust-maven-plugin: Build Rust Cargo crates within a Java Maven Project - https://github.com/questdb/rust-maven-plugin
